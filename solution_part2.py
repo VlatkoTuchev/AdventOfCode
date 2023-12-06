@@ -24,7 +24,15 @@
 # In this schematic, there are two gears. The first is in the top left; it has part numbers 467 and 35, so its gear ratio is 16345. The second gear is in the lower right; its gear ratio is 451490. (The * adjacent to 617 is not a gear because it is only adjacent to one part number.) Adding up all of the gear ratios produces 467835.
 
 import re
-import numpy as np
+
+def find_number_with_index(string, index):
+    pattern = r'\d+'
+
+    for match in re.finditer(pattern, string):
+        if match.start()-1 <= index < match.end()+1:
+            return match.group()
+
+    return None
 
 with open(r'C:\Users\vlatk\Desktop\GitHub Repos\Brainster_vsc_repos\AdventOfCode\Day3\input.txt') as file:
     content = [line for line in file]
@@ -44,25 +52,29 @@ for i in range(len(content)):
         pass
     else:
         matches_atrix = [(match.group(), match.start(), match.end()) for match in re.finditer(astrix_regex, content[i])]
-        matches_numbers_above_row = [(match.group(), match.start(), match.end()) for match in re.finditer(number_regex, content[i-1])]
-        matches_numbers_below_row = [(match.group(), match.start(), match.end()) for match in re.finditer(number_regex, content[i+1])]
 
-        # print(matches_numbers_above_row)
-        # print(matches_atrix)
-        # print(matches_numbers_below_row)
-
-
-        for i in range(len(matches_atrix)):
-            astrix = matches_atrix[i]
+        for y in range(len(matches_atrix)):
+            astrix = matches_atrix[y]
             start_index = astrix[1]
 
-        try:
-            print(np.array(matches_numbers_above_row)[:,2])
-        except:
-            pass
+            # try:
+            above_row_number = find_number_with_index(content[i-1], start_index)
+            below_row_number = find_number_with_index(content[i+1], start_index)
+            middle_row_number = find_number_with_index(content[i], start_index)
 
+            if above_row_number != None and below_row_number != None:
+                print(f"The numbers are {above_row_number} and {below_row_number}")
+                gear_ratios.append(int(above_row_number) * int(below_row_number))
+            elif middle_row_number != None and below_row_number != None:
+                print(f"The numbers are {middle_row_number} and {below_row_number}")
+                gear_ratios.append(int(middle_row_number) * int(below_row_number))
+            elif above_row_number != None and middle_row_number != None:
+                print(f"The numbers are {middle_row_number} and {above_row_number}")
+                gear_ratios.append(int(middle_row_number) * int(above_row_number))
+            # except:
+            #     pass
            
-
+print(sum(gear_ratios))
         # for i in range(len(above_row)):
         #     gear_ratios.append(above_row[i]*below_row[i])
 

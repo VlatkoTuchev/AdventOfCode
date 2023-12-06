@@ -36,11 +36,11 @@ with open(r'C:\Users\vlatk\Desktop\GitHub Repos\Brainster_vsc_repos\AdventOfCode
 
     file.close()
 
-    # Regular expression to find all numbers in the string
-    number_regex = r'\d+'
+# Regular expression to find all numbers in the string
+number_regex = r'\d+'
 
-    # Regular expression to find all characters except '.'
-    char_regex = r'[^\d\n.]'
+# Regular expression to find all characters except '.'
+char_regex = r'[^\d\n.]'
 
 adjacent_numbers = []
 
@@ -50,12 +50,7 @@ for i in range(len(content)):
     matches_numbers = [(match.group(), match.start(), match.end()) for match in re.finditer(number_regex, content[i])]
 
     for number in matches_numbers:
-        print(number)
-        if number[1] == 0:
-            start_index = number[1]
-        else:
-            start_index = number[1] - 1
-
+        start_index = number[1] if number[1] == 0 else number[1] - 1
         end_index = number[2] + 1
 
         if re.search(char_regex, content[i-1][start_index:end_index]) != None or re.search(char_regex, content[i+1][start_index:end_index]) != None or re.search(char_regex, content[i][start_index:end_index]):
