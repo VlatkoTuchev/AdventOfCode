@@ -1,4 +1,5 @@
 # --- Day 3: Gear Ratios ---
+
 # You and the Elf eventually reach a gondola lift station; he says the gondola lift will take you up to the water source, but this is as far as he can bring you. You go inside.
 
 # It doesn't take long to find the gondolas, but there seems to be a problem: they're not moving.
@@ -13,47 +14,53 @@
 
 # Here is an example engine schematic:
 
-# content = [
-# '467..114..',
-# '...*......',
-# '..35..633.',
-# '......#...',
-# '617*......',
-# '.....+.58.',
-# '..592.....',
-# '......755.',
-# '...$.*....',
-# '.664.598..'
-# ]
+# 467..114..
+# ...*......
+# ..35..633.
+# ......#...
+# 617*......
+# .....+.58.
+# ..592.....
+# ......755.
+# ...$.*....
+# .664.598..
 # In this schematic, two numbers are not part numbers because they are not adjacent to a symbol: 114 (top right) and 58 (middle right). Every other number is adjacent to a symbol and so is a part number; their sum is 4361.
 
 # Of course, the actual engine schematic is much larger. What is the sum of all of the part numbers in the engine schematic?
 
-import re
+string_ = """
+467..114..
+...*......
+..35..633.
+......#...
+617*......
+.....+.58.
+..592.....
+......755.
+...$.*....
+.664.598..
+"""
 
-with open(r'/Users/vlatko/Desktop/AdventOfCode/AdventOfCode/Day3/input.txt') as file:
-    content = [line for line in file]
+import numpy as np
+
+general_list = []
+
+with open('input.txt') as file: 
+    separated_list = []
+    for line in file: 
+        line = line.replace('\n', '')
+        for char in line:
+            separated_list.append(char)
+
+        general_list.append(separated_list)
 
     file.close()
 
-# Regular expression to find all numbers in the string
-number_regex = r'\d+'
-
-# Regular expression to find all characters except '.'
-char_regex = r'[^\d\n.]'
-
-adjacent_numbers = []
-
-for i in range(len(content)):
-
-    # Find all numbers and their indices
-    matches_numbers = [(match.group(), match.start(), match.end()) for match in re.finditer(number_regex, content[i])]
-
-    for number in matches_numbers:
-        start_index = number[1] if number[1] == 0 else number[1] - 1
-        end_index = number[2] + 1
-
-        if re.search(char_regex, content[i-1][start_index:end_index]) != None or re.search(char_regex, content[i+1][start_index:end_index]) != None or re.search(char_regex, content[i][start_index:end_index]):
-            adjacent_numbers.append(int(number[0]))
-
-print(sum(adjacent_numbers))
+print(general_list)
+        # for i in range(len(line)): 
+        #     char = line[i]
+        #     if char.isdigit() or char == '.':
+        #         pass
+        #     else:
+        #         print(line)
+        #         print(i)
