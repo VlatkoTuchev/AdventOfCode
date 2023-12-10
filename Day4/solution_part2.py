@@ -73,4 +73,4 @@ print(all_instances)
 #         if number in right_numbers.split(' ') and number.isdigit():
 #             counter += 1
 
-# 
+
