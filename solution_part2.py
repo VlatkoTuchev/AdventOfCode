@@ -72,3 +72,5 @@ print(all_instances)
 #     for number in left_numbers.split(' '):
 #         if number in right_numbers.split(' ') and number.isdigit():
 #             counter += 1
+
+# 
