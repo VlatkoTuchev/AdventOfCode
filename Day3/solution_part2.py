@@ -40,7 +40,7 @@ def find_number_with_index(string, index):
     else:
         return None
 
-with open(r'/Users/vlatko/Desktop/AdventOfCode/AdventOfCode/Day3/input.txt') as file:
+with open(r"Day3\input.txt") as file:
     content = [line for line in file]
 
     file.close()
