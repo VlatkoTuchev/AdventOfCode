@@ -21,56 +21,99 @@
 # # Your one instance of card 6 (one original) has no matching numbers and wins no more cards.
 # # Once all of the originals and copies have been processed, you end up with 1 instance of card 1, 2 instances of card 2, 4 instances of card 3, 8 instances of card 4, 14 instances of card 5, and 1 instance of card 6. In total, this example pile of scratchcards causes you to ultimately have 30 scratchcards!
 
+# def check_copy_cards(string):
+
+from collections import Counter
+
+def add_card_numbers(line):
+    left_numbers = line.split('|')[0].split(':')[1]
+    right_numbers = line.split('|')[1]
+
+    counter = 0
+    card_numbers = []
+    for number in left_numbers.split(' '):
+
+        if number in right_numbers.split(' ') and number.isdigit():
+            # winning_numbers number
+            card_number = int(line.split(':')[0].split(' ')[-1])
+            counter += 1
+            all_instances.append(card_number)
+
+            if card_number + counter > len(all_set):
+                pass
+            else:
+                card_number += counter
+
+            card_numbers.append(card_number)
+    
+    return card_numbers
+    
+def extend_values_recursively(original_dict, key, visited=None, depth=0):
+    if visited is None:
+        visited = set()
+
+    if key in visited:
+        return
+    visited.add(key)
+
+    # print(f'this is the starting {key}')
+    # print('\n')
+
+    original_values = list(original_dict[key])  # Copy to prevent modification
+    # print(original_values)
+    temp_list = original_dict[key]  # Create a temporary list for new values
+    # print(temp_list)
+    for referenced_key in original_values[:-1]:
+        print(referenced_key)
+        print(f'This is the key {key}')
+        temp_list.extend(original_dict[referenced_key])
+        # print(temp_list)
+        extend_values_recursively(original_dict, referenced_key, visited, depth + 1)
+
+    # original_dict[key] = list(temp_list)  # Update with unique values
+
 
 def find_instances():
     global all_instances, i
 
     while i < len(all_set):
-        line = all_set[i]
-        left_numbers = line.split('|')[0].split(':')[1]
-        right_numbers = line.split('|')[1]
+        line = all_set[i].replace('\n', '')
 
-        counter = 0
-        winning_numbers = ''
-        for number in left_numbers.split(' '):
-            if number in right_numbers.split(' ') and number.isdigit():
-                # winning_numbers number
-                card_number = int(line.split(':')[0].split(' ')[-1])
-                counter += 1
-                all_instances.append(card_number)
-
-                if card_number + counter > len(all_set):
-                    pass
-                else:
-                    card_number += counter
-
-        print(winning_numbers)
+        dict_answer[i+1] = add_card_numbers(line)
         i += 1
+
         return find_instances()
     
-    return all_instances
+    original_dict = dict_answer.copy()
 
-with open(r'/Users/vlatko/Desktop/AdventOfCode/AdventOfCode/Day4/input-2.txt') as file:
+    # Use the recursive function here
+    for key in list(original_dict.keys()):
+        extend_values_recursively(original_dict, key)
+        # print(original_dict)
+
+    for key in original_dict:
+        original_dict[key].append(key)
+
+    counter = Counter()
+
+    # Iterate through each list in the dictionary values and update the counter
+    for value_list in original_dict.values():
+        counter.update(value_list)
+
+    return original_dict, counter
+
+with open(r"C:\Users\vlatk\Desktop\GitHub Repos\Brainster_vsc_repos\AdventOfCode\Day4\input-2.txt") as file:
     total_winning_numbers = 0
     all_set = [line for line in file]
 
     file.close() 
 
 all_instances = []
+dict_answer = {}
 i = 0
 
-find_instances()
+dict_answer, counter = find_instances()
 
-print(all_instances)
+print(dict_answer, counter, sum(counter.values()))
 
-# for line in all_set:
-#     line = line.replace('\n', '')
-#     left_numbers = line.split('|')[0].split(':')[1]
-#     right_numbers = line.split('|')[1]
-
-#     counter = 0
-#     for number in left_numbers.split(' '):
-#         if number in right_numbers.split(' ') and number.isdigit():
-#             counter += 1
-
-
+# print(all_instances)
